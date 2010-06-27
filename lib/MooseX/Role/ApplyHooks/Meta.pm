@@ -1,9 +1,7 @@
 package MooseX::Role::ApplyHooks::Meta;
 
-use Moose;
+use Moose::Role;
 use MooseX::Role::ApplyHooks;
-
-extends 'Moose::Meta::Role';
 
 before apply => sub {
   my ($self, $other) = @_;
@@ -19,5 +17,5 @@ after apply => sub {
   }
 };
 
-no Moose;
+no Moose::Role;
 1;
