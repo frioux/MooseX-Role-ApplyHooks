@@ -8,19 +8,11 @@ use MooseX::Role::ApplyHooks::Meta;
 our %Before;
 our %After;
 
-sub BEFORE_APPLY { $Before{scalar caller(1)} = $_[1] };
-sub AFTER_APPLY  { $After {scalar caller(1)} = $_[1] };
-
-sub _curry_class {
-   my ($class, $name) = @_;
-   sub (&) { $class->$name(@_) }
-}
+sub BEFORE_APPLY(&) { $Before{scalar caller} = $_[0] };
+sub AFTER_APPLY (&) { $After {scalar caller} = $_[0] };
 
 use Sub::Exporter -setup => {
-   exports => [
-      map { $_ => \'_curry_class' }
-      qw(BEFORE_APPLY AFTER_APPLY)
-   ],
+   exports => [ qw(BEFORE_APPLY AFTER_APPLY) ],
    groups  => { default => [ qw(BEFORE_APPLY AFTER_APPLY) ] },
    collectors => {
       INIT => sub {
